@@ -12,16 +12,17 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
         use_sql_comments: true
         hbm2ddl:
-#          auto: update
+          auto: update
           # if you're not creating DB first time,
           # make sure to make auto: update
           # auto: update modifies on only changed things
-          auto: create
+#          auto: create
           # JPA creates tables on Database by searching @Entity
           # forms new tables after deleting existing tables
           # if you're creating DB first time,
