@@ -13,6 +13,7 @@ import umc.jupy.domain.common.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Store extends BaseEntity {
+    // 기존 ERD의 Restaurant
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

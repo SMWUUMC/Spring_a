@@ -6,8 +6,13 @@ import umc.jupy.domain.common.BaseEntity;
 import umc.jupy.domain.enums.Gender;
 import umc.jupy.domain.enums.MemberStatus;
 import umc.jupy.domain.enums.SocialType;
+import umc.jupy.domain.mapping.MemberAgree;
+import umc.jupy.domain.mapping.MemberMission;
+import umc.jupy.domain.mapping.MemberPrefer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,4 +51,16 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberAgree> memberAgreeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberPrefer> memberPreferList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Review> reviewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberMission> memberMissionList = new ArrayList<>();
 }
