@@ -1,9 +1,6 @@
 package umc.jupy.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import umc.jupy.domain.common.BaseEntity;
 
@@ -19,9 +16,12 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private Float score;
 }
