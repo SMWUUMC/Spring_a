@@ -2,6 +2,7 @@ package umc.jupy.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.jupy.domain.common.BaseEntity;
 import umc.jupy.domain.enums.Gender;
 import umc.jupy.domain.enums.MemberStatus;
 import umc.jupy.domain.enums.SocialType;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
