@@ -24,14 +24,19 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 20)
     private String name;
+    // length는 워크북과 동일하게 설정함
 
+    @Column(nullable = false, length = 40)
     private String address;
 
+    @Column(nullable = false, length = 40)
     private String specAddress;
 
     private LocalDate inactiveDate;
 
+    @Column(nullable = false, length = 50)
     private String email;
 
     private Integer point;
@@ -39,17 +44,19 @@ public class Member extends BaseEntity {
     private LocalDate birth;
     // 추후 LocalDate birthDate = LocalDate.of(2001, 8, 1);과 같이 저장하면 됨
 
-    private Integer phoneNumber; // null 허용 설정 추가해야 함
+    private Integer phoneNumber;
 
     private Integer age;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(10)")
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'")
     private MemberStatus status;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
