@@ -57,4 +57,18 @@ public class MemberPrefer extends BaseEntity {
     // 단방향 매핑
     // - 연관 관계 주인에게만 연관 관계를 주입하는 것
 
+    public void setMember(Member member){
+        if(this.member != null){
+            member.getMemberPreferList().remove(this);
+        }
+
+        this.member = member;
+
+        member.getMemberPreferList().add(this);
+    }
+
+    public void setFoodCategory(FoodCategory foodCategory){
+        this.foodCategory = foodCategory;
+    }
+
 }

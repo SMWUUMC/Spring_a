@@ -2,6 +2,9 @@ package umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import umc.spring.domain.common.BaseEntity;
 import umc.spring.domain.enums.Gender;
 import umc.spring.domain.enums.MemberStatus;
@@ -20,6 +23,10 @@ import java.util.List;
 @Getter
 // lombok에서 제공
 // getter를 만들어주는 어노테이션
+
+@DynamicUpdate
+@DynamicInsert
+
 @Builder
 // 빌더 클래스와 이를 반환하는 builder() 메서드 생성
 // Lombok의 @Builder
@@ -146,9 +153,10 @@ public class Member extends BaseEntity {
 
     private LocalDate inactiveDate;
 
-    @Column(nullable = false, length = 50)
+//    @Column(nullable = false, length = 50)
     private String email;
 
+    @ColumnDefault("0")
     private Integer point;
 
     // 양방향 매핑을 사용하게 될 경우 버그가 생길 위험이 있지만,

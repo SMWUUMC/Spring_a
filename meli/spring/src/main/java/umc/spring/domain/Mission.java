@@ -24,7 +24,7 @@ public class Mission extends BaseEntity {
 
     private LocalDate deadline;
 
-    @Column(columnDefinition = "text")
+    //@Column(columnDefinition = "text")
     private String missionSpec;
 
     @ManyToOne(fetch = FetchType.LAZY)
