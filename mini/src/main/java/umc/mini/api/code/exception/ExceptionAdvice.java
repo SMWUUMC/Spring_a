@@ -115,4 +115,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 request
         );
     }
+
+    //  MissionError - 유효하지 않은 미션 상태
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleInvalidMissionStatus(IllegalArgumentException e, WebRequest request) {
+        return handleExceptionInternalFalse(e, ErrorStatus.MISSION_BAD_REQUEST, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request, e.getMessage());
+    }
 }
