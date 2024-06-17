@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.spring.converter.StoreConverter;
+import umc.spring.domain.Mission;
 import umc.spring.domain.Review;
 import umc.spring.repository.MemberRepository;
+import umc.spring.repository.MissionRepository;
 import umc.spring.repository.ReviewRepository;
 import umc.spring.repository.StoreRepository;
 import umc.spring.web.dto.StoreRequestDTO;
@@ -19,6 +21,12 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
 
+    // 9주차 3. 가게에 미션 추가하기 API
+    private final MissionRepository missionRepository;
+
+
+
+    // 9주차 2. 가게에 리뷰 추가하기 API
     @Override
     public Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewDTO request){
 
@@ -28,6 +36,20 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         review.setStore(storeRepository.findById(storeId).get());
 
         return reviewRepository.save(review);
+
+    }
+
+
+
+    // 9주차 3. 가게에 미션 추가하기 API
+    @Override
+    public Mission createMission(Long storeId, StoreRequestDTO.MissionDTO request){
+
+        Mission mission = StoreConverter.toMission(request);
+
+        mission.setStore(storeRepository.findById(storeId).get());
+
+        return missionRepository.save(mission);
 
     }
 

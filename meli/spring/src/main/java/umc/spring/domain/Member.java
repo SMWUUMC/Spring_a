@@ -24,6 +24,11 @@ import java.util.List;
 // lombok에서 제공
 // getter를 만들어주는 어노테이션
 
+// JPA가 save로 데이터베이스에 저장 할 때,
+// null인 값에 대해 그냥 null을 insert 해버리는 것을 막기 위해
+// @DynamicUpdate, @DynamicInsert 적용
+// 이 두 개는 insert와 update 시 null 인 경우는
+// 그냥 쿼리를 보내지 않도록 해줍니다.
 @DynamicUpdate
 @DynamicInsert
 
@@ -154,6 +159,10 @@ public class Member extends BaseEntity {
     private LocalDate inactiveDate;
 
 //    @Column(nullable = false, length = 50)
+    // 원래 이메일을 소셜 로그인에서 처리 한 후,
+    // 나머지 정보를 기입 받는 것이 맞는 순서이나,
+    // 소셜 로그인 없이 하는 중이라
+    // 이메일은 nullable로 바꾸고 진행하겠습니다.
     private String email;
 
     @ColumnDefault("0")

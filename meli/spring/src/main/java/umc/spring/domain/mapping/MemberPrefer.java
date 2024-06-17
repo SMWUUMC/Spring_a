@@ -57,6 +57,10 @@ public class MemberPrefer extends BaseEntity {
     // 단방향 매핑
     // - 연관 관계 주인에게만 연관 관계를 주입하는 것
 
+    // 연관 관계 편의 매서드
+    // Service에서 연관 관계를 설정하고,
+    // 양방향 매핑이 된 경우 연관 관계 편의 매서드를 이용해
+    // 양방향 매핑을 해줍니다.
     public void setMember(Member member){
         if(this.member != null){
             member.getMemberPreferList().remove(this);

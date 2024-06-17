@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+// Member 객체를 만드는 작업 (클라이언트가 준 DTO to Entity)를
+// 서비스 단에서 할까요?
+// 7주차에서 설명했지만, 프로젝트마다 다릅니다.
+// 저의 경우 서비스는 오로지 비즈니스 로직에만 집중을 합니다.
+// 따라서 Member를 만드는 작업을 converter에서 하겠습니다.
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberCommandServiceImpl implements MemberCommandService {
@@ -27,6 +32,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Override
     @Transactional
+    // @Transactional을 통해 트랜잭션을 설정해줍니다.
     // 선언적 트랜잭션
     // - 트랜잭션에 관한 행위를 정의하는 것
     // 사용 방법
@@ -74,13 +80,17 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         Member newMember = MemberConverter.toMember(request);
 
+        // FoodCategory의 리스트를 얻기
         List<FoodCategory> foodCategoryList = request.getPreferCategory().stream()
+        // for문 보다는 stream을 사용 할 것을 강력히 권고합니다.
                 .map(category -> {
                     return foodCategoryRepository.findById(category).orElseThrow(() -> new FoodCategoryHandler(ErrorStatus.FOOD_CATEGORY_NOT_FOUND));
                 }).collect(Collectors.toList());
 
+        // 단방향 연관 관계 설정
         List<MemberPrefer> memberPreferList = MemberPreferConverter.toMemberPreferList(foodCategoryList);
 
+        // 양방향 연관 관계 설정
         memberPreferList.forEach(memberPrefer -> {memberPrefer.setMember(newMember);});
 
         return memberRepository.save(newMember);

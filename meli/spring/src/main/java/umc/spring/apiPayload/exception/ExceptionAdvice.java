@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -97,11 +98,22 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
-    //@Override
+    @Override
+    // CategoriesExistValidator의 isValid 메소드에서
+    // false를 리턴하면
+    // ConstraintViolationException을 발생시키는데,
+    // MemberRestController.join에서
+    // @Valid 어노테이션이존재하므로
+    // @ExistCategories에서 발생한 예외가 바로 전달되지 않고,
+    // @Valid 어노테이션이
+    // MethodArgumentNotValidException을 발생시킵니다.
+    // 따라서 최종적으로 ExceptionAdvice의
+    // handleMethodArgumentNotValid에서
+    // MethodArgumentNotValidException를 감지하게 됩니다.
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e,
             HttpHeaders headers,
-            HttpStatus status,
+            HttpStatusCode status,
             WebRequest request
     ) {
         Map<String, String> errors = new LinkedHashMap<>();

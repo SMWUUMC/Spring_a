@@ -31,4 +31,27 @@ public class MemberMission extends BaseEntity {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
+
+
+    // 9주차 4. 가게의 미션을 도전 중인 미션에 추가(미션 도전하기) API
+    public void setMember(Member member){
+        if(this.member != null){
+            member.getMemberMissionList().remove(this);
+        }
+
+        this.member = member;
+
+        member.getMemberMissionList().add(this);
+    }
+
+    public void setMission(Mission mission){
+        if (this.mission != null){
+            mission.getMemberMissionList().remove(this);
+        }
+
+        this.mission = mission;
+
+        mission.getMemberMissionList().add(this);
+    }
+
 }

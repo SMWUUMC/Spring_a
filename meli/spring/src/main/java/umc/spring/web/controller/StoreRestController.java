@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.spring.apiPayload.ApiResponse;
 import umc.spring.converter.StoreConverter;
+import umc.spring.domain.Mission;
 import umc.spring.domain.Review;
 import umc.spring.service.StoreService.StoreCommandService;
 import umc.spring.validation.annotation.ExistMember;
@@ -21,11 +22,17 @@ public class StoreRestController {
 
     private final StoreCommandService storeCommandService;
 
+    // 9주차 2. 가게에 리뷰 추가하기 API
     @PostMapping("/{storeId}/reviews")
     public ApiResponse<StoreResponseDTO.CreateReviewResultDTO> createReview(
             @RequestBody @Valid StoreRequestDTO.ReviewDTO request,
             @ExistStore @PathVariable(name = "storeId") Long storeId,
             // public @interface ExistStore {
+            // 이렇게 Request Body가 아닌 PathVariable 등
+            // 다른 값에 대해서도 어노테이션을 붙일 수 있는데,
+            // 이 경우는 @Valid를 거치지 않기에
+            // 곧바로 `ConstraintViolationException` 가 전달이 됩니다.
+            // 이를 이용해서 Path variable과 Query String의 값도 검증이 가능
             @ExistMember @RequestParam(name = "memberId") Long memberId
             // public @interface ExistMember {
             // @RequestParam
@@ -45,6 +52,21 @@ public class StoreRestController {
         Review review = storeCommandService.createReview(memberId, storeId, request);
 
         return ApiResponse.onSuccess(StoreConverter.toCreateReviewResultDTO(review));
+
+    }
+
+
+
+    // 9주차 3. 가게에 미션 추가하기 API
+    @PostMapping("/{storeId}/missions")
+    public ApiResponse<StoreResponseDTO.CreateMissionResultDTO> createMission(
+            @RequestBody @Valid StoreRequestDTO.MissionDTO request,
+            @ExistStore @PathVariable(name = "storeId") Long storeId
+    ) {
+
+        Mission mission = storeCommandService.createMission(storeId, request);
+
+        return ApiResponse.onSuccess(StoreConverter.toCreateMissionResultDTO(mission));
 
     }
 

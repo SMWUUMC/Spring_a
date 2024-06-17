@@ -8,10 +8,17 @@ import umc.spring.validation.annotation.ExistCategories;
 
 import java.util.List;
 
+// 화면 렌더링 시 음식 카테고리를 조회하는 API를 호출하고,
+// 그 API의 결과에서 음식 카테고리의 id값을
+// 프론트엔드가 넘겨준다는 것을 전제
 public class MemberRequestDTO {
 
     @Getter
     public static class JoinDTO{
+        // @NotBlank, @NotNull 등등 이런 어노테이션은
+        // java에서 제공하는 검증을 위한 어노테이션이며
+        // @ExistCategories처럼 커스텀 어노테이션과 같이
+        // 사용이 가능합니다!
         @NotBlank
         // @NotBlank 는 null 과 "" 과 " " 모두 허용하지 않습니다.
         //@NotEmpty 에서 " " validation 이 추가된 것입니다.
@@ -45,6 +52,16 @@ public class MemberRequestDTO {
         String specAddress;
         @ExistCategories
         // public @interface ExistCategories {
+        // 유저가 선호하는 카테고리를 처리
+        // @ExistCategories 어노테이션이 Request Body로 받아 올
+        // DTO(MemberRequestDTO.JoinDTO)의
+        // preferCategory필드에 붙어있으므로
+        // MemberRestController 컨트롤러에서
+        // RequestBody를 받아오는 과정에서
+        // @ExistCategories가 붙어있는
+        // MemberRequestDTO.JoinDTO.preferCategory로 인해
+        // CategoriesExistValidator.isValid의
+        // ConstraintValidatorContext 코드가 실행된다.
         List<Long> preferCategory;
     }
 

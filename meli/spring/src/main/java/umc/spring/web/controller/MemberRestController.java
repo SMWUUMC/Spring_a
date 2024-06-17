@@ -33,6 +33,13 @@ public class MemberRestController {
 
     private final MemberCommandService memberCommandService;
 
+    // CategoriesExistValidator의 isValid 메소드에서
+    // false를 리턴하면 ConstraintViolationException을
+    // 발생시키는데, MemberRestController.join에서
+    // @Valid 어노테이션이 존재하므로 MemberRequestDTO의
+    // @ExistCategories에서 발생한 예외가 바로 전달되지 않고,
+    // @Valid 어노테이션이
+    // MethodArgumentNotValidException을 발생시킵니다.
     @PostMapping("/")
     public ApiResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody @Valid MemberRequestDTO.JoinDTO request){
     // @Valid

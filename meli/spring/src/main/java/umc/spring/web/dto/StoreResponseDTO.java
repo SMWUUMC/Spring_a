@@ -18,4 +18,16 @@ public class StoreResponseDTO {
         LocalDateTime createdAt;
     }
 
+
+
+    // 9주차 3. 가게에 미션 추가하기 API
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateMissionResultDTO{
+        Long missionId;
+        LocalDateTime createdAt;
+    }
+
 }
