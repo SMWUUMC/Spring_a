@@ -5,31 +5,32 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import umc.spring.apiPayload.code.status.ErrorStatus;
-import umc.spring.domain.Member;
-import umc.spring.service.MemberService.MemberQueryService;
-import umc.spring.validation.annotation.ExistMember;
+import umc.spring.domain.Region;
+import umc.spring.repository.RegionRepository;
+import umc.spring.service.RegionService.RegionQueryService;
+import umc.spring.validation.annotation.ExistRegion;
 
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MemberExistValidator implements ConstraintValidator<ExistMember, Long> {
+//1. 특정 지역에 가게 추가하기 API
+public class RegionExistValidator implements ConstraintValidator<ExistRegion, Long> {
 
-    private final MemberQueryService memberQueryService;
+    private final RegionQueryService regionQueryService;
 
     @Override
-    public void initialize(ExistMember constraintAnnotation) {
+    public void initialize(ExistRegion constraintAnnotation){
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-
-        Optional<Member> target = memberQueryService.findMember(value);
+        Optional<Region> target = regionQueryService.findRegion(value);
 
         if (target.isEmpty()){
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.MEMBER_NOT_FOUND.toString()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(ErrorStatus.REGION_NOT_FOUND.toString()).addConstraintViolation();
             return false;
         }
         return true;
