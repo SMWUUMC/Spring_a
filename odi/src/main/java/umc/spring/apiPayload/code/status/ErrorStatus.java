@@ -27,7 +27,19 @@ public enum ErrorStatus implements BaseErrorCode {
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트"),
 
     // FoodCategory Error
-    FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD_CATEGORY4001", "음식 카테고리가 없습니다.");
+    FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD_CATEGORY4001", "음식 카테고리가 없습니다."),
+
+    // Store Error, 2. 가게에 리뷰 추가하기 API, 3. 가게에 미션 추가하기 API 관련 Error
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE4001", "가게가 없습니다."),
+
+    // 1. 특정 지역에 가게 추가하기 API 관련 Error
+    REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "REGION4001", "지역이 없습니다."),
+
+    // 4. 가게의 미션을 도전 중인 미션에 추가 (미션 도전하기) API 관련 Error - 미션 존재 여부
+    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION4001", "미션이 없습니다."),
+
+    // 4. 가게의 미션을 도전 중인 미션에 추가 (미션 도전하기) API 관련 Error - 미션 진행 여부
+    MEMBER_MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION4002", "미션이 진행 중입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

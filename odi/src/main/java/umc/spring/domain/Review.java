@@ -22,6 +22,7 @@ public class Review {
 
     private String body;
 
+    // 2. 가게에 리뷰 추가하기 API
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -41,7 +42,7 @@ public class Review {
     }
 
     public void setStore(Store store){
-        if (this.score != null)
+        if (this.store != null)
             store.getReviewList().remove(this);
         this.store = store;
         store.getReviewList().add(this);
