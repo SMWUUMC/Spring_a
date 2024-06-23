@@ -2,6 +2,9 @@ package umc.mini.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import umc.mini.domain.common.BaseEntity;
 import umc.mini.domain.enums.Gender;
 import umc.mini.domain.enums.UserStatus;
@@ -17,6 +20,8 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
@@ -43,14 +48,15 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 40)
     private String specAddress;
 
-    // 유저 비활성 날짜
-    private LocalDate inactiveDate;
+    // 유저 생년월일
+    private LocalDate birthDate;
 
     // 유저 이메일
-    @Column(nullable = false, length = 50)
+//    @Column(nullable = false, length = 50)
     private String email;
 
     // 유저 포인트
+    @ColumnDefault("0")
     private Integer point;
 
     // 유저 소셜로그인 타입
@@ -70,7 +76,7 @@ public class User extends BaseEntity {
 
     // 유저의 선호 음식 카테고리 그룹
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserPrefer> memberPreferList = new ArrayList<>();
+    private List<UserPrefer> userPreferList = new ArrayList<>();
 
     // 유저의 리뷰 그룹
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -78,5 +84,5 @@ public class User extends BaseEntity {
 
     // 유저의 미션 그룹
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserMission> memberMissionList = new ArrayList<>();
+    private List<UserMission> userMissionList = new ArrayList<>();
 }
