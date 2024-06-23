@@ -13,7 +13,7 @@ import umc.mini.web.dto.TempResponse;
 @RestController
 @RequestMapping("/temp")
 @RequiredArgsConstructor
-public class TempController {
+public class TempRestController {
 
     private final TempQueryService tempQueryService;
 
