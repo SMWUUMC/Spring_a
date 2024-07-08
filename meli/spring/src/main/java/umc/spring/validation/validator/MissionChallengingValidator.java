@@ -15,7 +15,6 @@ import umc.spring.validation.annotation.ChallengingMission;
 @RequiredArgsConstructor
 public class MissionChallengingValidator implements ConstraintValidator<ChallengingMission, Long> {
 
-    //private final MemberMissionRepository memberMissionRepository;
     private final MemberMissionQueryService memberMissionQueryService;
 
     @Override
@@ -25,8 +24,7 @@ public class MissionChallengingValidator implements ConstraintValidator<Challeng
 
     @Override
     public boolean isValid(Long missionId, ConstraintValidatorContext context){
-        //boolean isChallenging = memberMissionRepository.existsByMissionIdAndStatus(missionId, MissionStatus.CHALLENGING);
-        boolean isChallenging = memberMissionQueryService.findMemberMission(missionId, MissionStatus.CHALLENGING);
+        boolean isChallenging = memberMissionQueryService.findChallengingMemberMission(missionId, MissionStatus.CHALLENGING);
 
         if(isChallenging){
             context.disableDefaultConstraintViolation();

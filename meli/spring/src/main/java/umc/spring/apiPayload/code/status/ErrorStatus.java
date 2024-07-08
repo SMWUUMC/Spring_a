@@ -114,7 +114,14 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 9주차 4. 가게의 미션을 도전 중인 미션에 추가(미션 도전하기) API
     MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION_4001", "미션이 없습니다."),
-    MISSION_CHALLENGING(HttpStatus.NOT_FOUND, "MISSION_4002", "미션이 진행중입니다.")
+    MISSION_CHALLENGING(HttpStatus.NOT_FOUND, "MISSION_4002", "미션이 진행중입니다."),
+
+
+
+    // 10주차 4. 진행중인 미션 진행 완료로 바꾸기 API
+    MEMBERMISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBERMISSION_4001", "멤버미션이 없습니다."),
+    // 10주차 페이징 처리
+    PAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "PAGE_4001", "페이지가 없습니다.")
     ;
 
 

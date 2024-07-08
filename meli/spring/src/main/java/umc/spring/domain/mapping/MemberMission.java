@@ -54,4 +54,13 @@ public class MemberMission extends BaseEntity {
         mission.getMemberMissionList().add(this);
     }
 
+
+
+    // 10주차 4. 진행중인 미션 진행 완료로 바꾸기 API
+    public void setStatus(MissionStatus status){
+
+        this.status = status;
+
+    }
+
 }

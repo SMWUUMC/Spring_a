@@ -26,10 +26,8 @@ public class RegionRestController {
     public ApiResponse<RegionResponseDTO.CreateStoreResultDTO> createStore(
             @RequestBody @Valid RegionRequestDTO.StoreDTO request,
             @ExistRegion @PathVariable(name = "regionId") Long regionId
-            //@ExistMember @RequestParam(name = "memberId") Long memberId
     ) {
 
-        //Store store = regionCommandService.createStore(memberId, regionId, request);
         Store store = regionCommandService.createStore(regionId, request);
 
         return ApiResponse.onSuccess(RegionConverter.toCreateStoreResultDTO(store));
