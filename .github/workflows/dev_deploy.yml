@@ -1,0 +1,165 @@
+# CI/CD용 배포 스크립트
+
+# Github Action은 깃허브가 액션의 대상이 되는 리포지토리에서
+# .github 폴더를 찾아서 내부의 yml 파일을 읽어들여 진행된다
+# 유의해야 하는 점은 반드시 리포지토리의 root 경로(최상단 경로)에
+# .github 폴더가 있어야 한다는 것이다
+# 만약 .github가 리포지토리의 root가 아닌 다른 곳에 존재한다면
+# 깃허브 액션이 진행되지 않는다
+# 따라서 프로젝트 디렉토리 구조에서 root(최상단)에서
+# .github 폴더를 추가하고 내부에 CI/CD용 배포 스크립트를 만들어야한다
+
+# main에 머지가 된 경우 액션이 동작하도록만 스크립트 작성
+
+
+
+name: UMC Dev CI/CD # 여러분들 맘대로 이름 지으세요
+
+on:
+  pull_request:
+    types: [closed]
+    # PR이 closed 되었을 때, 즉 Merge 되었을 때 작동
+  workflow_dispatch:
+  # (2).수동 실행도 가능하도록
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # (3).OS환경
+    #if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    # merged 된 대상이 'main' 브랜치라는 의미
+    # Github Action이 돌아갈 대상이 'main' 브랜치라는 것
+    # 원한다면 다른 리포지토리의 특정 브랜치 코드도 가져올 수 있다
+    # 물론 퍼블릭이어야 하고 프라이빗 리포지토리면
+    # 추가적인 인증 과정을 거쳐야 한다
+
+    # Github Action은 jobs 내부의 여러 step을 통해 동작된다.
+    # step마다 원하는 동작을 하도록 할 수 있다.
+    # 따라서 CI/CD 파이프라인 말고도 AWS를 통해
+    # 이메일을 보내는 등의 작업도 포함이 가능하다.
+    steps:
+      # 단순히 step의 name을 짓는 것, 알아볼 수 있는 이름으로 짓기
+      # (4).코드 check out
+      # Checkout : 코드를 가져오는 것
+      - name: Checkout
+        uses: actions/checkout@v2
+        # Github Action의 actions/checkout@v2를 사용하겠다는 의미
+      # 보면 우선 Checkout에서 코드를 가져옵니다.
+      # uses는 어떤 것을 이용해서 할 것인가?인데
+      # 깃허브에서 제공해주는 checkout@v2를 사용한다.
+
+      # 다음 부분은 Github Actions를 이용해서
+      # jar 파일을 만드는 과정이 포함된다
+      # 이를 위해 깃허브 자체적으로 자바 jdk를 설치하고
+      # gradle이 들어갈 대상에 권한 부여를 하는 등의 과정을 거치는 step이다
+
+      # build/libs/*.jar를 만드는 과정
+      # JDK 설치
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        # actions에서 제공하는 setup-java@v3를 사용
+        with:
+          # (5).자바 설치
+          java-version: 17
+          # 자바 버전 설치
+          distribution: 'adopt'
+          # 어떤 Java 툴을 사용할 것인지 정하는 것
+
+      # (6).권한 부여
+      # 빌드된 대상이 돌아가기 위해 권한을 주는 명령어
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      # (7).build시작
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+        shell: bash
+
+
+
+      # (8).build시점의 시간확보
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      # (9).확보한 시간 보여주기
+      # 시간 정보를 가져오는 것
+      - name: Show Current Time
+        run: echo "CurrentTime=$"
+        shell: bash
+      # 해당 부분들은 타임스탬프를 기록하기 위한 부분이니
+      # 크게 신경쓰지 않아도 된다
+
+      # 중요한 것은 이 부분이다
+      # 보면 github Action을 통해 깃허브가 자체적으로
+      # 리눅스 가상 환경을 만들어서 배포에 필요한 빌드 과정을
+      # 진행한다는 것을 짐작할 수 있으며,
+      # 그래서 배포를 하기 위한 패키지를 리눅스 가상환경에
+      # 특정 디렉토리에 만드는 것을 확인할 수 있다.
+      # 그래서 cp, mkdir 등 리눅스 명령어가 보이는 것이다
+
+      # 제대로 빌드하는 과정
+      - name: Generate deployment package
+        # mkdir -p deploy
+        # deploy 디렉터리에 들어가서 올리기 전에 측정하기 위해
+
+        # cp build/libs/*.jar deploy/application.jar
+        # 임시적으로 올려둔 파일을 cp를 통해 생성
+        # 즉 deploy할 디렉터리에 복사하는 과정
+        # build/libs/*.jar는 스프링 부트 돌리면 저절로 생기는 것
+
+        # cp Procfile deploy/Procfile
+        # Procfile : 리눅스의 makefile과 같은 것
+        # Procfile 파일 생성 필요
+
+        # cp -r .ebextensions-dev deploy/.ebextensions
+        # cp -r .ebextensions deploy/.ebextensions
+        # ebextensions : elastic beanstalk extensions
+        # elastic beanstalk을 올릴 때 도움을 주는 것
+        # .ebextensions-dev 파일 생성 필요
+
+        # cp -r .platform deploy/.platform
+        # platform(NGINX)과 관련
+        # .platform 파일 생성 필요
+
+        # cd deploy && zip -r deploy.zip .
+        # 압축하는 과정
+
+        # Procfile, .ebextensions, .platform 파일 생성해야 함
+        # 아니면 Github Action이 실패한다
+        run: |
+          mkdir -p deploy
+          cp build/libs/*.jar deploy/application.jar
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions-dev deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip .
+
+      # Elastic Beanstalk에게 요청
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
+          # Elastic Beanstalk > 환경 > 애플리케이션 이름
+          #application_name: breifing-dev
+          application_name: umc-dev
+          # Elastic Beanstalk > 환경 이름
+          #environment_name: Breifing-dev-env
+          environment_name: Umc-dev-env
+          version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
+          # 타임스탬프 관련
+          #region: ap-northeast-1
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          wait_for_deployment: false
+          #wait_for_environment_recovery: 60
+
+
+
+#1:37:13
