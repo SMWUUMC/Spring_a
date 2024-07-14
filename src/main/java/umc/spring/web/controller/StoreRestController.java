@@ -35,9 +35,14 @@ public class StoreRestController {
     private final StoreQueryService storeQueryService;
 
     // 9주차 2. 가게에 리뷰 추가하기 API
-    @PostMapping("/{storeId}/addreviews")
+    // 12주차 사진도 같이 업로드하기
+    @PostMapping(value = "/{storeId}/addreviews", consumes = "multipart/form-data")
+    // consumes = "multipart/form-data"
+    // 위처럼 Controller를 수정하고 다시 swagger에 접속하면
+    // swagger 자체도 변화되며 사진 업로드가 가능합니다!
     public ApiResponse<StoreResponseDTO.CreateReviewResultDTO> createReview(
-            @RequestBody @Valid StoreRequestDTO.ReviewDTO request,
+            //@RequestBody @Valid StoreRequestDTO.ReviewDTO request,
+            @ModelAttribute @Valid StoreRequestDTO.ReviewDTO request,
             @ExistStore @PathVariable(name = "storeId") Long storeId,
             // public @interface ExistStore {
             // 이렇게 Request Body가 아닌 PathVariable 등

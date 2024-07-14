@@ -7,6 +7,7 @@ import umc.spring.web.dto.StoreRequestDTO;
 public interface StoreCommandService {
 
     // 9주차 2. 가게에 리뷰 추가하기 API
+    // 12주차 사진도 같이 업로드하기
     Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewDTO request);
 
 
