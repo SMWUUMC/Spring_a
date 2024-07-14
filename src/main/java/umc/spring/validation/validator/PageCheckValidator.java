@@ -3,11 +3,15 @@ package umc.spring.validation.validator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import umc.spring.apiPayload.code.status.ErrorStatus;
 import umc.spring.validation.annotation.CheckPage;
 
+@Component
+@RequiredArgsConstructor
 public class PageCheckValidator implements ConstraintValidator<CheckPage, Integer> {
 
     @Override
@@ -25,28 +29,11 @@ public class PageCheckValidator implements ConstraintValidator<CheckPage, Intege
             return false;
         }
 
-        modifyRequestParameter(pagenum - 1);
-
         return true;
 
     }
 
-    private void modifyRequestParameter(int newPagenum){
 
-        // 1. 현재 요청 객체의 속성을 가져오기
-        // RequestContextHolder는 현재 요청의 속성을 ThreadLocal을 사용하여 저장하고 관리한다.
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
-        if (requestAttributes != null) {
-            // 2. HttpServletRequest를 통해 객체 가져오기
-            HttpServletRequest request = requestAttributes.getRequest();
-            // 3. 페이지 번호 수정
-            // 페이지 번호를 0 기반으로 변환한 값을 HttpServletRequest 객체의 속성으로 설정한다.
-            // 이렇게 설정된 속성은 이후의 요청 처리 과정에서 사용될 수 있다.
-            request.setAttribute("page", newPagenum);
-        }
-
-    }
 
     // int : 기본 타입
     // Integer : 참조 타입

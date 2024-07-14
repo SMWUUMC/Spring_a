@@ -136,8 +136,8 @@ public class StoreRestController {
     // API 완성 단계에서 query String도 추가할 것입니다.
     public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(
             @ExistStore @PathVariable(name = "storeId") Long storeId,
-            //@CheckPage @RequestParam(name = "page") Integer page
-            @RequestParam(name = "page") Integer page
+            @CheckPage @RequestParam(name = "page") Integer page
+            //@RequestParam(name = "page") Integer page
     ) {
         // content가 없으면 ApiResponse<StoreResponseDTO.ReviewPreViewListDTO>
         // 여기서 StoreResponseDTO.ReviewPreViewListDTO가
