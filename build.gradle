@@ -48,6 +48,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// 우선 S3에 업로드,
+	// 즉 외부 API를 사용하기 위해 아래의 의존성을
+	// build.gradle에 추가 해줍시다.
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
@@ -56,6 +60,7 @@ tasks.named('test') {
 
 
 
+// 11주차
 jar{
 	enabled = false
 }
