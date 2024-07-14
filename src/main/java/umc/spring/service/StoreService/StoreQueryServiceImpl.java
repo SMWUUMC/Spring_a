@@ -33,7 +33,10 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
         Store store = storeRepository.findById(storeId).get();
 
-        Page<Review> storePage = reviewRepository.findAllByStore(store, PageRequest.of(page, 10));
+        // Controller를 보면, Page를 0번이 1 페이지라고 해 두었는데
+        // 이에 대한 검증(page가 음수로 오는 경우)을
+        // 커스텀 어노테이션을 이용해 처리할 수 있겠죠?
+        Page<Review> storePage = reviewRepository.findAllByStore(store, PageRequest.of(page - 1, 10));
 
         return storePage;
 
